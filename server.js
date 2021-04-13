@@ -1,9 +1,9 @@
-const express = require('express');//referência da biblioteca - import express; using express;
-const { uuid } = require('uuidv4');
+const  express  =  require ('express') ;  // import express; usando express;
+const  { uuid }  =  require ('uuidv4') ;
 
 const server = express();
 
-server.use(express.json()) //tota informação que vier do cliente vai ser processada como JSON
+server.use(express.json()) //toda informação que vier do cliente vai ser processada como JSON
 
 // Métodos HTTP (REST)
 //GET = READ (obter recursos) tipo JSON (JavaScrip Object Notation)
@@ -17,26 +17,31 @@ server.use(express.json()) //tota informação que vier do cliente vai ser proce
 
 contatos = [];
 
-server.get('/', function(request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
+//localhost:3000/
+server.get('/', function (request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
     response.json(contatos);
 })
 
-server.get('/:id', function(request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
+//localhost:3000/2c3f1ba2-0959-4760-a1cc-cdde5876d2d2
+server.get('/:id', function (request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
     const id = request.params.id;
-    response.json(id);
+    const result = contatos.filter(contato => contato.id ==id);
+    response.json(result);
 })
 
-server.post('/', function(request, response){
+server.post('/', function (request, response) {
     const nome = request.body.nome;
     const telefone = request.body.telefone;
 
-    tutular = {
+    var contato = {
         id: uuid(),
-        nome: nome,
-        telefone: telefone
-    }
-    contatos.push(tutular);
+        nome,
+        telefone
+    };
+
+    contatos.push(contato);
     response.status(201).send();
+
 })
 
 server.listen(process.env.PORT || 3000);
