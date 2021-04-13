@@ -1,7 +1,7 @@
 const  express  =  require ('express') ;  // import express; usando express;
-const  { uuid }  =  require ('uuidv4') ;
-
 const server = express();
+
+const database = require('./database');
 
 server.use(express.json()) //toda informação que vier do cliente vai ser processada como JSON
 
@@ -15,31 +15,26 @@ server.use(express.json()) //toda informação que vier do cliente vai ser proce
 //Informações passadas pela URL = request.params (produto/1)
 //Informação passada pela API = corpo de mensagem (request.body(JSON))
 
-contatos = [];
 
 //localhost:3000/
-server.get('/', function (request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
+server.get('/', async function (request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
+    const contatos = await database.read();
     response.json(contatos);
 })
 
 //localhost:3000/2c3f1ba2-0959-4760-a1cc-cdde5876d2d2
-server.get('/:id', function (request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
+/*server.get('/:id', function (request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
     const id = request.params.id;
     const result = contatos.filter(contato => contato.id ==id);
     response.json(result);
-})
+})*/
 
-server.post('/', function (request, response) {
+server.post('/', async function (request, response) {
     const nome = request.body.nome;
     const telefone = request.body.telefone;
 
-    var contato = {
-        id: uuid(),
-        nome,
-        telefone
-    };
-
-    contatos.push(contato);
+    const result = await database.create(nome, telefone);
+    
     response.status(201).send();
 
 })
