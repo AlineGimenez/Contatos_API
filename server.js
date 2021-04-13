@@ -17,26 +17,24 @@ server.use(express.json()) //toda informação que vier do cliente vai ser proce
 
 
 //localhost:3000/
-server.get('/', async function (request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
+server.get('/', async function(request, response) {
     const contatos = await database.read();
     response.json(contatos);
 })
 
-//localhost:3000/2c3f1ba2-0959-4760-a1cc-cdde5876d2d2
-/*server.get('/:id', function (request, response) {//Request = tudo o que manda do cliente para o servidor, response = tudo o que manda do servidor para o cliente
+// localhost:3000/1
+server.get('/:id', async function(request, response) {
     const id = request.params.id;
-    const result = contatos.filter(contato => contato.id ==id);
-    response.json(result);
-})*/
+    const contato = await database.find(id);
+    response.json(contato);
+})
 
-server.post('/', async function (request, response) {
+// localhost:3000/
+server.post('/', async function(request, response) {
     const nome = request.body.nome;
     const telefone = request.body.telefone;
 
     const result = await database.create(nome, telefone);
-    
     response.status(201).send();
-
 })
-
 server.listen(process.env.PORT || 3000);
