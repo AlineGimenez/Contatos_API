@@ -1,8 +1,10 @@
 const  express  =  require ('express') ;  // import express; usando express;
 const server = express();
+const cors = require ('cors');
 
 const database = require('./database');
 
+server.use(cors())
 server.use(express.json()) //toda informação que vier do cliente vai ser processada como JSON
 
 // Métodos HTTP (REST)
