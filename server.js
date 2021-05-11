@@ -37,7 +37,7 @@ server.post('/', async function(request, response) {
     const telefone = request.body.telefone;
 
     const result = await database.create(nome, telefone);
-    response.status(201).json({id: result, nome, telefone});
+    response.status(200).json({id: result, nome, telefone});
 })
 
 server.put('/:id', async function(request, response){
