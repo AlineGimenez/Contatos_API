@@ -22,9 +22,10 @@ module.exports = {
 
     async create(nome, telefone) {
         try {
-            const sql = `INSERT INTO contatos (nome, telefone) VALUES ($1, $2)`;
+            const sql = `INSERT INTO contatos (nome, telefone) VALUES ($1, $2) RETURNING id`;
             const result = await pool.query(sql, [nome, telefone]);
-            return result.rows;
+            return result.rows[0].id;
+
         }catch(error) {
             console.log(error);
             return -1;
